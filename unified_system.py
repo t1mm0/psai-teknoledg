@@ -94,30 +94,39 @@ def psai_redirect():
     """Redirect /psai to dashboard"""
     return redirect('/dashboard')
 
-@app.route('/psai-timeline')
-def psai_timeline():
-    """PSAI_1 Timeline Interface"""
+@app.route('/option-a')
+def option_a():
+    """OPTION_A - Simple trends AI flow monitor (easy)"""
     return app.send_static_file('web_timeline.html')
 
-@app.route('/reports')
-def reports():
-    """Reports page"""
-    return jsonify({'message': 'Reports page coming soon'})
+@app.route('/option-b')
+def option_b():
+    """OPTION_B - Automated Agentic with KG lite"""
+    return jsonify({
+        'title': 'OPTION_B - Automated Agentic with KG lite',
+        'message': 'Advanced agentic automation with knowledge graph integration',
+        'status': 'Coming soon',
+        'features': ['Automated agents', 'Knowledge graph lite', 'Intelligent workflows']
+    })
 
-@app.route('/settings')
-def settings():
-    """Settings page"""
-    return jsonify({'message': 'Settings page coming soon'})
+@app.route('/option-c')
+def option_c():
+    """OPTION_C - Full autonomous temporal KG"""
+    return jsonify({
+        'title': 'OPTION_C - Full autonomous temporal KG',
+        'message': 'Complete autonomous system with temporal knowledge graph',
+        'status': 'Coming soon',
+        'features': ['Full autonomy', 'Temporal knowledge graph', 'Advanced AI reasoning']
+    })
 
-@app.route('/analytics')
-def analytics():
-    """Analytics page"""
-    return jsonify({'message': 'Analytics page coming soon'})
-
-@app.route('/admin')
-def admin():
-    """Admin page"""
-    return jsonify({'message': 'Admin page coming soon'})
+@app.route('/specsheet.pdf')
+def specsheet():
+    """Spec Sheet PDF"""
+    return jsonify({
+        'title': 'Technical Specifications',
+        'message': 'Spec sheet PDF will be available here',
+        'status': 'Documentation coming soon'
+    })
 
 @app.route('/api/auth', methods=['POST'])
 def authenticate():
@@ -325,7 +334,7 @@ def get_client_info():
             'name': 'Client One',
             'company': 'Teknoledg',
             'description': 'Advanced AI automation and data intelligence solutions for modern businesses.',
-            'permissions': ['psai_1', 'reports', 'settings', 'analytics'],
+            'permissions': ['option_a', 'option_b', 'option_c', 'specsheet'],
             'theme': {
                 'primary_color': '#20b2aa',
                 'background_color': '#262626',
