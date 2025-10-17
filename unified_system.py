@@ -87,12 +87,37 @@ def auth_page():
 @app.route('/dashboard')
 def dashboard():
     """PSAI_1 Dashboard (requires authentication)"""
-    return app.send_static_file('scripts/web_timeline.html')
+    return app.send_static_file('dashboard.html')
 
 @app.route('/psai')
 def psai_redirect():
     """Redirect /psai to dashboard"""
     return redirect('/dashboard')
+
+@app.route('/psai-timeline')
+def psai_timeline():
+    """PSAI_1 Timeline Interface"""
+    return app.send_static_file('web_timeline.html')
+
+@app.route('/reports')
+def reports():
+    """Reports page"""
+    return jsonify({'message': 'Reports page coming soon'})
+
+@app.route('/settings')
+def settings():
+    """Settings page"""
+    return jsonify({'message': 'Settings page coming soon'})
+
+@app.route('/analytics')
+def analytics():
+    """Analytics page"""
+    return jsonify({'message': 'Analytics page coming soon'})
+
+@app.route('/admin')
+def admin():
+    """Admin page"""
+    return jsonify({'message': 'Admin page coming soon'})
 
 @app.route('/api/auth', methods=['POST'])
 def authenticate():
@@ -289,6 +314,27 @@ def log_auth_attempt(ip: str, success: bool):
     # Also print to console
     status = "SUCCESS" if success else "FAILED"
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] AUTH {status} from {ip}")
+
+@app.route('/api/client/info', methods=['GET'])
+def get_client_info():
+    """Get client information based on authentication"""
+    try:
+        # For now, return default client info
+        # In a real implementation, you'd decode the JWT token to get client ID
+        client_info = {
+            'name': 'Client One',
+            'company': 'Teknoledg',
+            'description': 'Advanced AI automation and data intelligence solutions for modern businesses.',
+            'permissions': ['psai_1', 'reports', 'settings', 'analytics'],
+            'theme': {
+                'primary_color': '#20b2aa',
+                'background_color': '#262626',
+                'accent_color': '#008b8b'
+            }
+        }
+        return jsonify(client_info)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
