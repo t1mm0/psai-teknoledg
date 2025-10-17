@@ -1,0 +1,56 @@
+{
+  "clients": {
+    "client1": {
+      "name": "Client One",
+      "password": "316h7y$!x-71ck13-516n41!",
+      "folder": "client1",
+      "description": "Primary client with full PSAI_A access",
+      "permissions": ["psai_1", "reports", "settings", "analytics"],
+      "logo": "images/logo.png",
+      "theme": {
+        "primary_color": "#20b2aa",
+        "background_color": "#262626",
+        "accent_color": "#008b8b"
+      }
+    },
+    "client2": {
+      "name": "Client Two", 
+      "password": "client2pass2024!",
+      "folder": "client2",
+      "description": "Secondary client with limited access",
+      "permissions": ["psai_1", "reports"],
+      "logo": "images/logo.png",
+      "theme": {
+        "primary_color": "#ff6b6b",
+        "background_color": "#2c2c2c",
+        "accent_color": "#ff5252"
+      }
+    },
+    "client3": {
+      "name": "Client Three",
+      "password": "client3secure!",
+      "folder": "client3", 
+      "description": "Enterprise client with advanced features",
+      "permissions": ["psai_1", "reports", "settings", "analytics", "admin"],
+      "logo": "images/logo.png",
+      "theme": {
+        "primary_color": "#4ecdc4",
+        "background_color": "#1a1a1a",
+        "accent_color": "#45b7aa"
+      }
+    },
+    "default": {
+      "name": "Default Client",
+      "password": "default123",
+      "folder": "default",
+      "description": "Default client for testing",
+      "permissions": ["psai_1"],
+      "logo": "images/logo.png",
+      "theme": {
+        "primary_color": "#20b2aa",
+        "background_color": "#262626", 
+        "accent_color": "#008b8b"
+      }
+    }
+  }
+}

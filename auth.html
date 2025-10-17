@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teknoledg - Authentication</title>
+    <style>
+        /* Teknoledg Authentication Page */
+        /* Purpose: Professional authentication page for Teknoledg company */
+        /* Last Modified: 2024-12-19 | By: AI Assistant | Completeness: 95/100 */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #262626; /* Dark charcoal */
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Black bar at top */
+        .top-bar {
+            background-color: #000000;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            position: relative;
+            z-index: 5;
+        }
+        
+        /* Logo wrapper */
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            height: 100%;
+        }
+        
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+        
+        .logotype {
+            height: 50px;
+            width: auto;
+        }
+        
+        /* Main content area */
+        .main-content {
+            position: relative;
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            transform: translateX(-20%);
+        }
+        
+        /* Authentication card */
+        .auth-card {
+            background-color: #3a3a3a;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid #555;
+            position: relative;
+            z-index: 10;
+            min-width: 400px;
+            max-width: 500px;
+        }
+        
+        .auth-card h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-align: center;
+        }
+        
+        .ip-display {
+            background-color: #2c2c2c;
+            border: 1px solid #555;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #20b2aa;
+            text-align: center;
+        }
+        
+        .ip-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .passcode-section {
+            margin-top: 30px;
+        }
+        
+        .passcode-label {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        
+        .passcode-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background-color: #2c2c2c;
+            color: #ffffff;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .passcode-input:focus {
+            outline: none;
+            border-color: #20b2aa;
+        }
+        
+        .passcode-input::placeholder {
+            color: #666;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #20b2aa;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: #1a9b94;
+        }
+        
+        .submit-btn:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+        
+        .error-message {
+            color: #dc143c;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success-message {
+            color: #20b2aa;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+        
+        /* Police bot image */
+        .police-bot {
+            position: fixed;
+            right: 40px;
+            top: 60vh;
+            transform: translateY(-50%) translateX(-20%);
+            z-index: 0;
+            opacity: 0.8;
+            height: 100vh;
+            width: auto;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid #555;
+            border-top: 3px solid #20b2aa;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .top-bar {
+                padding: 0 20px;
+                height: 60px;
+            }
+            
+            .logo {
+                height: 35px;
+            }
+            
+            .logotype {
+                height: 30px;
+            }
+            
+            .auth-card {
+                min-width: 300px;
+                padding: 30px 20px;
+            }
+            
+            .police-bot {
+                right: 20px;
+                max-height: 200px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+        
+        /* Animation for card entrance */
+        .auth-card {
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Black top bar with logo -->
+    <div class="top-bar">
+        <div class="logo-wrapper">
+            <img src="images/logo.png" alt="Teknoledg Logo" class="logo">
+            <img src="images/logotype_white.svg" alt="Teknoledg" class="logotype">
+        </div>
+    </div>
+    
+    <!-- Main content area -->
+    <div class="main-content">
+        <!-- Authentication card -->
+        <div class="auth-card">
+            <h1>Teknoledg Access</h1>
+            
+            <div class="ip-display">
+                <div class="ip-label">Your IP Address</div>
+                <div id="userIP">Loading...</div>
+            </div>
+            
+            <div class="passcode-section">
+                <div class="passcode-label">Passcode</div>
+                <input 
+                    type="password" 
+                    id="passcodeInput" 
+                    class="passcode-input" 
+                    placeholder="Enter your passcode"
+                    autocomplete="current-password"
+                >
+                <button id="submitBtn" class="submit-btn" onclick="authenticate()">
+                    Access System
+                </button>
+                
+                <div id="errorMessage" class="error-message"></div>
+                <div id="successMessage" class="success-message"></div>
+                
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <div>Authenticating...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Police bot image -->
+        <img src="images/data-police-bot@0.5x.png" alt="Data Police Bot" class="police-bot">
+    </div>
+
+    <script>
+        // Teknoledg Authentication JavaScript
+        // Purpose: Handle IP detection and authentication for clients.teknoledg.com
+        // Last Modified: 2024-12-19 | By: AI Assistant | Completeness: 95/100
+        
+        const VALID_PASSCODE = '316h7y$!x-71ck13-516n41!';
+        const API_BASE = '/api';
+        
+        // Get user's IP address
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                document.getElementById('userIP').textContent = data.ip;
+            } catch (error) {
+                document.getElementById('userIP').textContent = 'Unable to detect IP';
+                console.error('IP detection failed:', error);
+            }
+        }
+        
+        // Authentication function
+        async function authenticate() {
+            const passcode = document.getElementById('passcodeInput').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Clear previous messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            if (!passcode.trim()) {
+                showError('Please enter a passcode');
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            loading.style.display = 'block';
+            
+            try {
+                const response = await fetch(`${API_BASE}/auth`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        passcode: passcode,
+                        ip: document.getElementById('userIP').textContent
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showSuccess('Authentication successful! Redirecting...');
+                    // Store auth token
+                    localStorage.setItem('teknoledg_auth_token', data.token);
+                    // Redirect after delay
+                    setTimeout(() => {
+                        window.location.href = data.redirect_url || '/dashboard';
+                    }, 1500);
+                } else {
+                    showError(data.message || 'Authentication failed');
+                }
+                
+            } catch (error) {
+                console.error('Authentication error:', error);
+                showError('Connection error. Please try again.');
+            } finally {
+                // Hide loading state
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+        
+        // Show error message
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            
+            // Clear passcode input
+            document.getElementById('passcodeInput').value = '';
+            document.getElementById('passcodeInput').focus();
+        }
+        
+        // Show success message
+        function showSuccess(message) {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+        }
+        
+        // Handle Enter key press
+        document.getElementById('passcodeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                authenticate();
+            }
+        });
+        
+        // Check if already authenticated
+        function checkAuthStatus() {
+            const token = localStorage.getItem('teknoledg_auth_token');
+            if (token) {
+                // Verify token is still valid
+                fetch(`${API_BASE}/verify`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Already authenticated, redirect
+                        window.location.href = '/dashboard';
+                    }
+                })
+                .catch(error => {
+                    // Token invalid, clear it
+                    localStorage.removeItem('teknoledg_auth_token');
+                });
+            }
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            getUserIP();
+            checkAuthStatus();
+            
+            // Focus on passcode input
+            document.getElementById('passcodeInput').focus();
+        });
+    </script>
+</body>
+</html>

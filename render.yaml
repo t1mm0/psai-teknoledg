@@ -1,0 +1,28 @@
+# Render.com Deployment Configuration
+# PSAI_A + Teknoledg Unified System
+# Purpose: Single-click deployment to Render
+# Last Modified: 2024-12-19 | By: AI Assistant | Completeness: 95/100
+
+services:
+  - type: web
+    name: psaia-teknoledg
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python unified_system.py
+    envVars:
+      - key: TEKNOLEDG_PASSCODE
+        value: 316h7y$!x-71ck13-516n41!
+      - key: TEKNOLEDG_JWT_SECRET
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+      - key: FLASK_DEBUG
+        value: false
+      - key: PORT
+        value: 10000
+    healthCheckPath: /api/health
+    autoDeploy: true
+    branch: main
+    rootDir: .
+    dockerfilePath: ./Dockerfile
