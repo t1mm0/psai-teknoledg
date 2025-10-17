@@ -12,12 +12,13 @@ import secrets
 import hashlib
 from datetime import datetime, timedelta
 from typing import Dict, Optional
-from flask import Flask, request, jsonify, render_template_string, redirect, url_for
+from flask import Flask, request, jsonify, render_template_string, redirect, url_for, send_from_directory
 from flask_cors import CORS
 import jwt
 import subprocess
 import threading
 import time
+import stat
 
 app = Flask(__name__)
 CORS(app)
@@ -36,6 +37,70 @@ psai_process_status = {
     'results': {},
     'error': None
 }
+
+class ClientExecutionManager:
+    """Manages client-specific script execution with proper permissions"""
+    
+    def __init__(self):
+        self.client_base_path = "clients"
+        self.active_processes = {}
+    
+    def get_client_path(self, client_id: str) -> str:
+        """Get the full path to a client's directory"""
+        return os.path.join(self.client_base_path, client_id)
+    
+    def ensure_client_permissions(self, client_id: str):
+        """Ensure client directory has proper execution permissions"""
+        client_path = self.get_client_path(client_id)
+        if os.path.exists(client_path):
+            # Set directory permissions
+            os.chmod(client_path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+            
+            # Set script permissions recursively
+            for root, dirs, files in os.walk(client_path):
+                for file in files:
+                    if file.endswith('.py'):
+                        file_path = os.path.join(root, file)
+                        os.chmod(file_path, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+    
+    def execute_client_script(self, client_id: str, script_name: str, args: list = None) -> Dict:
+        """Execute a script in the client's privileged environment"""
+        try:
+            client_path = self.get_client_path(client_id)
+            script_path = os.path.join(client_path, "psai_a", "scripts", script_name)
+            
+            if not os.path.exists(script_path):
+                return {"success": False, "error": f"Script {script_name} not found for client {client_id}"}
+            
+            # Ensure permissions
+            self.ensure_client_permissions(client_id)
+            
+            # Prepare command
+            cmd = ["python3", script_path]
+            if args:
+                cmd.extend(args)
+            
+            # Execute with client's working directory
+            process = subprocess.Popen(
+                cmd,
+                cwd=client_path,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+            
+            # Store process reference
+            process_id = f"{client_id}_{script_name}_{int(time.time())}"
+            self.active_processes[process_id] = process
+            
+            return {
+                "success": True,
+                "process_id": process_id,
+                "message": f"Started {script_name} for client {client_id}"
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
 
 class AuthManager:
     """Manages authentication tokens and sessions"""
@@ -72,6 +137,7 @@ class AuthManager:
 
 # Initialize auth manager
 auth_manager = AuthManager()
+client_executor = ClientExecutionManager()
 
 # Authentication routes
 @app.route('/')
@@ -97,7 +163,7 @@ def psai_redirect():
 @app.route('/option-a')
 def option_a():
     """OPTION_A - Simple trends AI flow monitor (easy)"""
-    return app.send_static_file('web_timeline.html')
+    return app.send_from_directory('clients/client1/psai_a/scripts', 'web_timeline.html')
 
 @app.route('/option-b')
 def option_b():
@@ -341,6 +407,24 @@ def get_client_info():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/client/execute', methods=['POST'])
+def execute_client_script():
+    """Execute a script in a client's privileged environment"""
+    try:
+        data = request.get_json()
+        client_id = data.get('client_id', 'client1')
+        script_name = data.get('script_name')
+        args = data.get('args', [])
+        
+        if not script_name:
+            return jsonify({'success': False, 'error': 'Script name required'}), 400
+        
+        result = client_executor.execute_client_script(client_id, script_name, args)
+        return jsonify(result)
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
@@ -349,7 +433,7 @@ def health_check():
         'service': 'PSAI_A + Teknoledg Unified System',
         'timestamp': datetime.now().isoformat(),
         'version': '1.0.0',
-        'features': ['authentication', 'psai_1_automation', 'dashboard']
+        'features': ['authentication', 'psai_1_automation', 'dashboard', 'client_execution']
     })
 
 if __name__ == '__main__':
