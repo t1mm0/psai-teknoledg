@@ -71,10 +71,11 @@
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
-            z-index: 10;
+            z-index: 15;
             min-width: 400px;
             max-width: 500px;
             backdrop-filter: blur(10px);
+            margin: 0 auto;
         }
         
         .auth-card h1 {
@@ -178,26 +179,28 @@
         .designer-bot {
             position: fixed;
             left: 20px;
-            top: 60vh;
+            top: 50vh;
             transform: translateY(-50%);
             z-index: 1;
             opacity: 0.7;
-            height: 80vh;
+            height: 85vh;
             width: auto;
-            max-width: 300px;
+            object-fit: contain;
+            max-width: none;
         }
         
         /* Police bot image (right side) */
         .police-bot {
             position: fixed;
             right: 20px;
-            top: 60vh;
+            top: 50vh;
             transform: translateY(-50%);
             z-index: 1;
             opacity: 0.7;
-            height: 80vh;
+            height: 85vh;
             width: auto;
-            max-width: 300px;
+            object-fit: contain;
+            max-width: none;
         }
         
         /* Loading spinner */
@@ -244,12 +247,14 @@
             
             .designer-bot {
                 left: 10px;
-                max-height: 200px;
+                height: 60vh;
+                object-fit: contain;
             }
             
             .police-bot {
                 right: 10px;
-                max-height: 200px;
+                height: 60vh;
+                object-fit: contain;
             }
             
             .main-content {
