@@ -60,20 +60,21 @@
             align-items: center;
             justify-content: center;
             padding: 40px;
-            transform: translateX(-20%);
+            transform: translateX(-10%);
         }
         
         /* Authentication card */
         .auth-card {
-            background-color: #3a3a3a;
-            border-radius: 12px;
+            background: linear-gradient(135deg, #2c2c2c 0%, #3a3a3a 100%);
+            border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid #555;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
             z-index: 10;
             min-width: 400px;
             max-width: 500px;
+            backdrop-filter: blur(10px);
         }
         
         .auth-card h1 {
@@ -176,13 +177,14 @@
         /* Police bot image */
         .police-bot {
             position: fixed;
-            right: 40px;
+            right: 20px;
             top: 60vh;
-            transform: translateY(-50%) translateX(-20%);
-            z-index: 0;
-            opacity: 0.8;
-            height: 100vh;
+            transform: translateY(-50%);
+            z-index: 1;
+            opacity: 0.7;
+            height: 80vh;
             width: auto;
+            max-width: 300px;
         }
         
         /* Loading spinner */
