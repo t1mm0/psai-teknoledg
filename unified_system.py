@@ -122,11 +122,7 @@ def option_c():
 @app.route('/specsheet.pdf')
 def specsheet():
     """Spec Sheet PDF"""
-    return jsonify({
-        'title': 'Technical Specifications',
-        'message': 'Spec sheet PDF will be available here',
-        'status': 'Documentation coming soon'
-    })
+    return app.send_static_file('specsheet.pdf')
 
 @app.route('/api/auth', methods=['POST'])
 def authenticate():
